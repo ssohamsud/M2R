@@ -2,7 +2,7 @@
 
 **Project Aim:** Combine single-cell RNA-seq analysis, trajectory inference, and cell–cell communication to map how intestinal stem cells diversify into absorptive and secretory lineages and identify key intercellular signaling pathways.
 
-**Authors:** Soham Sud, Junyou Li, Ben Thimbleby, Gao Yifan, Sahil Rai
+**Authors:** Soham Sud, Yifan, Sahil Rai, Michael Li, Ben Thimbleby
 **Supervisor:** Omer Karin
 
 ---
