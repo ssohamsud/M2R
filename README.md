@@ -1,127 +1,65 @@
-# Data Driven Modelling of Cell Differentiation Trajectories 
+# Data-Driven Modelling of Intestinal Cell Differentiation Trajectories 🍃🔬
 
-A reproducible analysis pipeline to:
+**Project Aim:** Combine single-cell RNA-seq analysis, trajectory inference, and cell–cell communication to map how intestinal stem cells diversify into absorptive and secretory lineages and identify key intercellular signaling pathways.
 
-1. **Annotate** intestinal epithelial cell clusters (stem, TA, goblet, enteroendocrine, etc.)
-2. **Visualize** clean, publication-quality UMAPs with on-plot labels
-3. **Infer** cell–cell communication networks using NATMI (and LIANA)
-4. **Summarize** interactions in heatmaps and tables
-
----
-
-## 📁 Repository Structure
-
-```
-gut-cell-comm/
-├── data/
-│   ├── raw/                 # Raw input files (FASTQ, count matrices)
-│   └── processed/           # Processed AnnData objects, QC’d matrices
-│
-├── notebooks/
-│   ├── 01_preprocessing.ipynb
-│   ├── 02_umap_labeling.ipynb
-│   └── 03_cellcell_heatmap.ipynb
-│
-├── scripts/
-│   ├── annotate_clusters.py  # Annotation helper functions
-│   ├── plot_umap.py          # Clean UMAP plotting utilities
-│   └── build_heatmap.py      # NATMI / LIANA wrapper script
-│
-├── results/
-│   ├── figures/             # Exported UMAPs & heatmaps (PNG, PDF)
-│   └── tables/              # CSV/TSV outputs of marker genes & interactions
-│
-├── environment.yml          # Conda environment specification
-├── requirements.txt         # Pip dependencies
-├── LICENSE                  # MIT License
-└── README.md                # This file
-```
+**Authors:** Soham Sud, Junyou Li, Ben Thimbleby, Gao Yifan, Sahil Rai
+**Supervisor:** Omer Karin
 
 ---
 
 ## 🚀 Quickstart
 
-1. **Clone the repo**
+```bash
+# Clone and enter project folder
+git clone https://github.com/yourusername/M2R_Group_19_Intestine.git
+cd M2R_Group_19_Intestine
 
-   ```bash
-   git clone https://github.com/yourusername/gut-cell-comm.git
-   cd gut-cell-comm
-   ```
+# Install environment
+conda env create -f environment.yml
+conda activate M2R
+# or: pip install -r requirements.txt
 
-2. **Set up the environment**
-
-   ```bash
-   conda env create -f environment.yml
-   conda activate gut-cell-comm
-   # or: pip install -r requirements.txt
-   ```
-
-3. **Run the notebooks**
-   Launch JupyterLab:
-
-   ```bash
-   jupyter lab notebooks/
-   ```
-
-   * `01_preprocessing.ipynb`: QC, normalization, HVG selection
-   * `02_umap_labeling.ipynb`: clustering, annotation, clean UMAP plotting
-   * `03_cellcell_heatmap.ipynb`: NATMI/LIANA analysis and heatmaps
-
-4. **Or execute the scripts**
-
-   ```bash
-   python scripts/annotate_clusters.py \
-       --adata data/processed/my_adata.h5ad \
-       --out results/tables/cluster_annotations.csv
-
-   python scripts/plot_umap.py \
-       --adata data/processed/my_adata.h5ad \
-       --labels results/tables/cluster_annotations.csv \
-       --out results/figures/umap_clean.png
-
-   python scripts/build_heatmap.py \
-       --adata data/processed/my_adata.h5ad \
-       --method natmi \
-       --out results/figures/heatmap_natmi.png
-   ```
+# Run analyses interactively with JupyterLab
+jupyter lab notebooks/
+# Or execute scripts end‑to‑end:
+python scripts/preprocess.py --input data/raw/counts.csv --output data/processed/adata.h5ad
+python scripts/cluster_and_annotate.py --adata data/processed/adata.h5ad
+python scripts/run_trajectories.py --adata data/processed/adata.h5ad
+python scripts/build_interactions.py --adata data/processed/adata.h5ad
+```
 
 ---
 
-## 📊 Results
+## 📊 Key Results
 
-* **Publication-ready UMAPs** with on-plot labels
-* **NATMI & LIANA heatmaps** summarizing cluster interactions
-* **Tables** of top ligand–receptor pairs per sender–receiver pair
+* **Cluster annotation:** Identified ISC, TA progenitors, enterocytes, goblet, Paneth, tuft, and enteroendocrine cells.
+* **Trajectories:** Secretory (Paneth/Goblet/Enteroendocrine) vs. absorptive (Enterocyte) branching mapped by DPT, CellRank, and Palantir.
+* **Cell–cell signaling:** Highlighted Paneth→ISC niche factors (Wnt3, EGF, DLL4) and enteroendocrine hormone signals.
 
-All outputs are in `results/figures/` and `results/tables/`.
+Results are saved in `results/figures/` (plots) and `results/tables/` (tables).
 
 ---
 
-## 🛠️ Workflow Details
+## 🧬 Methods Overview
 
-* **Data input**: raw counts → AnnData (`.h5ad`) with `.obs['refined_type']`
-* **Preprocessing**: filtering, normalization, highly-variable gene (HVG) selection, PCA, neighbor graph, UMAP
-* **Annotation**: marker-gene–based cluster labeling + manual curation
-* **Visualization**: clean UMAPs using `matplotlib` and `scanpy`, with semi-transparent dots and haloed text labels
-* **Interaction inference**:
-
-  * **NATMI**: `create_communication_network` for ligand–receptor scoring
-  * **LIANA**: `rank_aggregate` for consensus scoring across multiple resources
-* **Summarization**: pivot interaction scores into sender×receiver matrices and plot heatmaps
+1. **Preprocessing:** Filtering, log-normalization, HVG selection, PCA, neighbor graph, UMAP (Scanpy).
+2. **Clustering & Annotation:** Leiden clustering + marker-gene–based assignment.
+3. **Trajectory Inference:** DPT pseudotime, CellRank fate mapping, Palantir random-walk pseudotime.
+4. **Communication Analysis:** LIANA rank-aggregate (mouse consensus) and NATMI `create_communication_network`; aggregated into sender→receiver heatmaps.
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feat-xyz`)
-3. Implement your changes and add tests if applicable
+1. Fork the repo
+2. Create a branch (`git checkout -b feat-xyz`)
+3. Implement changes & add tests
 4. Submit a pull request
 
-Please follow the existing code style and add clear documentation for new features.
+Please follow existing code style and update docs accordingly.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT © Imperial College London
